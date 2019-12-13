@@ -108,7 +108,7 @@ print(clf.iv_df) #Information value dataset
 | 5  | default       | 1.6450124824351054e-05 |
 +----+---------------+------------------------+
 ```
-#### Apply this handly rule to select variables based on Information value
+#### Apply this handy rule to select variables based on Information value
 ```
 +-------------------+-----------------------------+
 | Information Value | Variable Predictiveness     |

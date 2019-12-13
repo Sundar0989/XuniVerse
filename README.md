@@ -1,6 +1,6 @@
 # xverse
 
-**xverse** short for **X**uni**Verse** is a Python module for machine learning in the space of feature engineering, feature transformation and feature selection.  
+**xverse** short for **X** uni**Verse** is a Python module for machine learning in the space of feature engineering, feature transformation and feature selection.  
 
 ## Installation
 

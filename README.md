@@ -16,10 +16,6 @@ or
 ```sh
 pip install xverse
 ```
-or 
-```sh
-conda install -c conda-forge xverse
-```
 To install the development version. you can use
 ```sh
 pip install --upgrade git+https://github.com/Sundar0989/XuniVerse

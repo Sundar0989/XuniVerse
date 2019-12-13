@@ -2,6 +2,8 @@
 
 **xverse** short for **X** uni**Verse** is a Python module for machine learning in the space of feature engineering, feature transformation and feature selection.  
 
+Currently, xverse package handles only binary target.
+
 ## Installation
 
 The package requires `numpy, pandas, scikit-learn, scipy` and `statsmodels`. In addition, the package is tested on Python version 3.5 and above.

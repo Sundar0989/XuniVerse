@@ -223,7 +223,7 @@ clf.feature_votes_
 +----+---------------+-------------------+---------------+-------------------------------+-------------+------------+-------+-------+
 ```
 ## Contributing
-Category encoders is under active development, if you'd like to be involved, we'd love to have you. Check out the CONTRIBUTING.md file or open an issue on the github project to get started.
+XuniVerse is under active development, if you'd like to be involved, we'd love to have you. Check out the CONTRIBUTING.md file or open an issue on the github project to get started.
 
 ## References
 https://www.listendata.com/2015/03/weight-of-evidence-woe-and-information.html

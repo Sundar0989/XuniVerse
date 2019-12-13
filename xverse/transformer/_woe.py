@@ -302,7 +302,10 @@ class WOE(BaseEstimator, TransformerMixin):
                 new_column_name = original_column_name
             
             #check if the bin mapping is present 
-            check_is_fitted(self, 'woe_bins')
+            #check_is_fitted(self, 'woe_bins')
+            if not self.woe_bins:
+                raise ValueError("woe_bins variable is not present. \
+                                Estimator has to be fitted to apply transformations.")
             
             outX[new_column_name] = tempX.replace(self.woe_bins[original_column_name])
             

@@ -11,7 +11,7 @@ setuptools.setup(
     description="Xverse (X-uniVerse) is collection of transformers for feature engineering and feature selection",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Sundar0989/xverse",
+    url="https://github.com/Sundar0989/XuniVerse",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

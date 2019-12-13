@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
 import scipy.stats.stats as stats
 import pandas.core.algorithms as algos
-from sklearn.utils.validation import check_is_fitted
+#from sklearn.utils.validation import check_is_fitted
 from sklearn.utils import check_array
 from ..transformer import MonotonicBinning
 
@@ -11,7 +11,8 @@ pd.options.mode.chained_assignment = None
 
 class WOE(BaseEstimator, TransformerMixin):
     
-    """Weight of evidence transformation for categorical variables. For numeric variables, monotonic operation is provided as default with this package. 
+    """Weight of evidence transformation for categorical variables. For numeric variables, 
+    monotonic operation is provided as default with this package. 
     
     Parameters
     ----------
@@ -34,12 +35,15 @@ class WOE(BaseEstimator, TransformerMixin):
         'least_frequent' - Missing values are combined with the least frequent item in the dataset
     
     woe_bins: dict of dicts(default=None)
-        This feature is added as part of future WOE transformations or scoring. If this value is set, then WOE values provided for each of the features here will be used for transformation. Applicable only in the transform method. 
+        This feature is added as part of future WOE transformations or scoring. If this value is set, 
+        then WOE values provided for each of the features here will be used for transformation. 
+        Applicable only in the transform method. 
         Dictionary structure - {'feature_name': float list}
         Example - {'education': {'primary' : 0.1, 'tertiary' : 0.5, 'secondary', 0.7}}
     
     monotonic_binning: bool (default=True)
-        This parameter is used to perform monotonic binning on numeric variables. If set to False, numeric variables would be ignored.
+        This parameter is used to perform monotonic binning on numeric variables. If set to False, 
+        numeric variables would be ignored.
     
     mono_feature_names: 'all' or list (default='all')
         list of features to perform monotonic binning operation. 
@@ -47,19 +51,25 @@ class WOE(BaseEstimator, TransformerMixin):
         - list of features: ['age', 'income',......]
     
     mono_max_bins: int (default=20)
-        Maximum number of bins that can be created for any given variable. The final number of bins created will be less than or equal to this number.
+        Maximum number of bins that can be created for any given variable. The final number of bins 
+        created will be less than or equal to this number.
         
     mono_force_bins: int (default=3)
-        It forces the module to create bins for a variable, when it cannot find monotonic relationship using "max_bins" option. The final number of bins created will be equal to the number specified.
+        It forces the module to create bins for a variable, when it cannot find monotonic relationship 
+        using "max_bins" option. The final number of bins created will be equal to the number specified.
         
     mono_cardinality_cutoff: int (default=5)
-        Cutoff to determine if a variable is eligible for monotonic binning operation. Any variable which has unique levels less than this number will be treated as character variables. At this point no binning operation will be performed on the variable and it will return the unique levels as bins for these variable.
+        Cutoff to determine if a variable is eligible for monotonic binning operation. Any variable 
+        which has unique levels less than this number will be treated as character variables. 
+        At this point no binning operation will be performed on the variable and it will return the 
+        unique levels as bins for these variable.
     
     mono_prefix: string (default=None)
         Variable prefix to be used for the column created by monotonic binning. 
         
     mono_custom_binning: dict (default=None)
-        Using this parameter, the user can perform custom binning on variables. This parameter is also used to apply previously computed bins for each feature (Score new data).
+        Using this parameter, the user can perform custom binning on variables. This parameter is also 
+        used to apply previously computed bins for each feature (Score new data).
         Dictionary structure - {'feature_name': float list}
         Example - {'age': [0., 1., 2., 3.]}
         
@@ -97,7 +107,8 @@ class WOE(BaseEstimator, TransformerMixin):
     # the fit function for WOE transformer
     def fit(self, X, y):
         
-        #if the function is used as part of pipeline, then try to unpack tuple values produced in the previous step. Added as a part of pipeline feature. 
+        #if the function is used as part of pipeline, then try to unpack tuple values 
+        #produced in the previous step. Added as a part of pipeline feature. 
         try:
             X, y = X
         except:
@@ -108,12 +119,14 @@ class WOE(BaseEstimator, TransformerMixin):
         
         #The length of X and Y should be equal
         if X.shape[0] != y.shape[0]:
-            raise ValueError("Mismatch in input lengths. Length of X is " + str(X.shape[0]) + " but length of y is " + str(y.shape[0]) + ".")
+            raise ValueError("Mismatch in input lengths. Length of X is " + str(X.shape[0]) + " \
+                            but length of y is " + str(y.shape[0]) + ".")
         
         # The label must be binary with values {0,1}
         unique = np.unique(y)
         if len(unique) != 2:
-            raise ValueError("The target column y must be binary. But the target contains " + str(len(unique)) + " unique value(s).")
+            raise ValueError("The target column y must be binary. But the target contains " + str(len(unique)) + \
+                             " unique value(s).")
 
         #apply monotonic binning operation
         if self.monotonic_binning:
@@ -178,11 +191,14 @@ class WOE(BaseEstimator, TransformerMixin):
             for i in X:
                 X[i] = X[i].fillna(X[i].value_counts().index[-1])
         else:
-            raise ValueError("Missing values could be treated with one of these three options - 'separate', 'mode', 'least_frequent'. The provided option is - " + str(self.treat_missing))
+            raise ValueError("Missing values could be treated with one of these three options - \
+                            'separate', 'mode', 'least_frequent'. \
+                            The provided option is - " + str(self.treat_missing))
         
         return X
     
-    #WOE binning - The function is applied on each columns identified in the fit function. Here, the input X is a Pandas Series type.
+    #WOE binning - The function is applied on each columns identified in the fit function. 
+    #Here, the input X is a Pandas Series type.
     def train(self, X, y):
         
         # Assign values
@@ -206,9 +222,12 @@ class WOE(BaseEstimator, TransformerMixin):
         temp_woe['Event_Distribution'] = temp_woe['Event']/total_event
         temp_woe['Non_Event_Distribution'] = temp_woe['Non_Event']/total_non_event
         temp_woe['WOE'] = np.log(temp_woe['Event_Distribution']/temp_woe['Non_Event_Distribution'])
-        temp_woe['Information_Value'] = (temp_woe['Event_Distribution']-temp_woe['Non_Event_Distribution'])*temp_woe['WOE']
+        temp_woe['Information_Value'] = (temp_woe['Event_Distribution']- \
+                                         temp_woe['Non_Event_Distribution'])*temp_woe['WOE']
         temp_woe['Variable_Name'] = X.name
-        temp_woe = temp_woe[['Variable_Name', 'Category', 'Count', 'Event', 'Non_Event', 'Event_Rate', 'Non_Event_Rate', 'Event_Distribution', 'Non_Event_Distribution', 'WOE', 'Information_Value']]
+        temp_woe = temp_woe[['Variable_Name', 'Category', 'Count', 'Event', 'Non_Event', \
+                             'Event_Rate', 'Non_Event_Rate', 'Event_Distribution', 'Non_Event_Distribution', \
+                             'WOE', 'Information_Value']]
         temp_woe = temp_woe.replace([np.inf, -np.inf], 0)
         temp_woe['Information_Value'] = temp_woe['Information_Value'].sum()
         temp_woe = temp_woe.reset_index(drop=True)
@@ -227,7 +246,8 @@ class WOE(BaseEstimator, TransformerMixin):
     #Transform new data or existing data based on the fit identified or custom transformation provided by user
     def transform(self, X, y=None):
         
-        #if the function is used as part of pipeline, then try to unpack tuple values produced in the previous step. Added as a part of pipeline feature. 
+        #if the function is used as part of pipeline, then try to unpack tuple values 
+        #produced in the previous step. Added as a part of pipeline feature. 
         try:
             X, y = X
         except:
@@ -238,8 +258,8 @@ class WOE(BaseEstimator, TransformerMixin):
         
         #identify the features on which the transformation should be performed
         try:
-            check_is_fitted(self, 'transform_features')
-            transform_features = self.transform_features
+            if self.transform_features:
+                transform_features = self.transform_features
         except:
             if self.woe_bins:
                 transform_features = list(self.woe_bins.keys())
@@ -251,12 +271,14 @@ class WOE(BaseEstimator, TransformerMixin):
         
         #raise error if the list is empty
         if not transform_features:
-            raise ValueError("Estimator has to be fitted to make monotonic transformations")
+            raise ValueError("Empty list for WOE transformation. \
+                            Estimator has to be fitted to make WOE transformations")
         
         #use the custom bins provided by user for numeric variables
         if self.mono_custom_binning:
             try:
-                check_is_fitted(self, 'mono_bin_clf')
+                if self.mono_bin_clf:
+                    pass
             except:    
                 self.mono_bin_clf = MonotonicBinning(feature_names=self.mono_feature_names, 
                                             max_bins=self.mono_max_bins, force_bins=self.mono_force_bins,

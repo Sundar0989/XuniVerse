@@ -230,7 +230,7 @@ https://www.listendata.com/2015/03/weight-of-evidence-woe-and-information.html
 
 https://medium.com/@sundarstyles89/variable-selection-using-python-vote-based-approach-faa42da960f0
 
-# Contributors
+## Contributors
 Alessio Tamburro (https://github.com/alessiot)
 
 

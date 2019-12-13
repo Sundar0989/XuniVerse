@@ -15,14 +15,16 @@ from sklearn.feature_selection import SelectFromModel
 from ..transformer import WOE
 from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 from collections import defaultdict
-from sklearn.utils.validation import check_is_fitted
+#from sklearn.utils.validation import check_is_fitted 
 from functools import reduce
 
 pd.options.mode.chained_assignment = None
 
 class VotingSelector(BaseEstimator, TransformerMixin):
     
-    """Select the input features for a binary model prediction using voting technique. Apply multiple feature selection techniques (Linear and Non linear) on the dataset and calculate the vote secured by all input features for a given binary target. The final dataset contains, 
+    """Select the input features for a binary model prediction using voting technique. Apply multiple 
+    feature selection techniques (Linear and Non linear) on the dataset and calculate the vote secured 
+    by all input features for a given binary target. The final dataset contains, 
     
     1. Feature selection techniques applied on the dataset
     2. Whether the variable is selected in step 1 for each technique
@@ -41,7 +43,10 @@ class VotingSelector(BaseEstimator, TransformerMixin):
         - Example - ['age', 'income', .......]
     
     selection_techniques: 'all', 'quick' or list(default='all')
-        List of selection techniques to be applied on the data. Available techniques - Weight of evidence ('WOE'), Random Forest ('RF'), Recursive Feature Elimination ('RFE'), Extra Trees Classifier ('ETC'), Chi Square ('CS'), L1 feature selection ('L_ONE').
+        List of selection techniques to be applied on the data. 
+        Available techniques - Weight of evidence ('WOE'), Random Forest ('RF'), 
+        Recursive Feature Elimination ('RFE'), Extra Trees Classifier ('ETC'), 
+        Chi Square ('CS'), L1 feature selection ('L_ONE').
         
         'all' - Apply all selection techniques ['WOE', 'RF', 'RFE', 'ETC', 'CS', 'L_ONE']
         'quick' - ['WOE','RF','ETC']
@@ -54,7 +59,9 @@ class VotingSelector(BaseEstimator, TransformerMixin):
         int - user provided number in integer format
     
     handle_category= 'woe' or 'le' (default='woe')
-        Handle category values transformation using Label encoder or Weight of Evidence option. Takes care of missing values too. It treats missing values as separate level.
+        Handle category values transformation using Label encoder 
+        or Weight of Evidence option. Takes care of missing values too. 
+        It treats missing values as separate level.
         'woe' - use weight of evidence transformation
         'le' - use label encoder transformation
     
@@ -65,7 +72,8 @@ class VotingSelector(BaseEstimator, TransformerMixin):
         0 - use 0 to impute the missing values
     
     minimum_votes = int (default=0)
-        Minimum number of votes needed to select a variable after feature selection. Only used in the transform process. Default value is set to 0 to select all variables.
+        Minimum number of votes needed to select a variable after feature selection. 
+        Only used in the transform process. Default value is set to 0 to select all variables.
         
     """
     
@@ -161,7 +169,8 @@ class VotingSelector(BaseEstimator, TransformerMixin):
         
     def fit(self, X, y):
         
-        #if the function is used as part of pipeline, then try to unpack tuple values produced in the previous step. Added as a part of pipeline feature. 
+        #if the function is used as part of pipeline, then try to unpack tuple values 
+        #produced in the previous step. Added as a part of pipeline feature. 
         try:
             X, y = X
         except:
@@ -172,12 +181,14 @@ class VotingSelector(BaseEstimator, TransformerMixin):
         
         #The length of X and Y should be equal
         if X.shape[0] != y.shape[0]:
-            raise ValueError("Mismatch in input lengths. Length of X is " + str(X.shape[0]) + " but length of y is " + str(y.shape[0]) + ".")
+            raise ValueError("Mismatch in input lengths. Length of X is " + str(X.shape[0]) + " \
+                            but length of y is " + str(y.shape[0]) + ".")
         
         # The label must be binary with values {0,1}
         unique = np.unique(y)
         if len(unique) != 2:
-            raise ValueError("The target column y must be binary. But the target contains " + str(len(unique)) + " unique value(s).")
+            raise ValueError("The target column y must be binary. But the target contains " + str(len(unique)) \
+                             + " unique value(s).")
         
         #assign available techniques
         self.available_techniques = ['WOE', 'RF', 'RFE', 'ETC', 'CS', 'L_ONE']
@@ -194,7 +205,8 @@ class VotingSelector(BaseEstimator, TransformerMixin):
         
         #raise error if there is no features to select
         if not list(self.use_features):
-            raise ValueError("No input feature list provided. Please provide a list of features or set 'all' for feature_names to start the feature selection process")
+            raise ValueError("No input feature list provided. Please provide a list of features or \
+                            set 'all' for feature_names to start the feature selection process")
         
         #determine the number of features to select
         if self.no_of_features == 'auto':
@@ -204,7 +216,8 @@ class VotingSelector(BaseEstimator, TransformerMixin):
         elif isinstance(self.no_of_features, int):
             pass
         else:
-            raise ValueError("The number of features to select option is  invalid. Please provide a valid option - 'auto', 'sqrt' or integer value.")
+            raise ValueError("The number of features to select option is  invalid. \
+                            Please provide a valid option - 'auto', 'sqrt' or integer value.")
         
         #start training on the data
         temp_X = X[self.use_features]
@@ -237,11 +250,13 @@ class VotingSelector(BaseEstimator, TransformerMixin):
             for i in num_miss_present:
                 num_mapping[i] = 0
         else:
-            raise ValueError("Error while handling imputation for numerical values. Accepted inputs - 'median', 'mean' or 0")
+            raise ValueError("Error while handling imputation for numerical values. \
+                            Accepted inputs - 'median', 'mean' or 0")
         
         self.mapping.update(num_mapping)
         return X
     
+    #train on the data
     def train(self, X, y):
         
         #determine selection technique based on user provided options
@@ -251,7 +266,8 @@ class VotingSelector(BaseEstimator, TransformerMixin):
             self.selection_techniques = ['WOE','RF','ETC']
         else:
             if not isinstance(self.selection_techniques, list):
-                raise ValueError("The selection techniques provided should be list. But the input provided is " + str(type(self.selection_techniques)))
+                raise ValueError("The selection techniques provided should be list. \
+                                But the input provided is " + str(type(self.selection_techniques)))
             
             if not self.selection_techniques:
                 raise ValueError("The selection technique list is empty. Please provide a list of techniques.")
@@ -276,7 +292,8 @@ class VotingSelector(BaseEstimator, TransformerMixin):
                 transformed_X[i] = mapping[i].transform(transformed_X[i].fillna("NA"))
             self.mapping=mapping 
         else:
-            raise ValueError("Error while handling categorical values. Accepted inputs - 'woe' for Weight of evidence and 'le' for Label Encoder.")
+            raise ValueError("Error while handling categorical values. \
+                            Accepted inputs - 'woe' for Weight of evidence and 'le' for Label Encoder.")
         
         #Take the encoded categorical features and the original numerical features from the dataset
         X = pd.concat([transformed_X[self.categorical_features], X[self.numerical_features]], axis=1)
@@ -344,21 +361,30 @@ class VotingSelector(BaseEstimator, TransformerMixin):
             score_table['Votes'] = score_table.sum(axis=1)
             return final_results, score_table.sort_values('Votes',ascending=0)
         else:
-            raise ValueError("Please provide a valid selection technique. Available selection techniques are - Weight of evidence ('WOE'), Random Forest ('RF'), Recursive Feature Elimination ('RFE'), Extra Trees Classifier ('ETC'), Chi Square ('CS') and L1 feature selection ('L_ONE')")
+            raise ValueError("Please provide a valid selection technique. \
+                            Available selection techniques are - Weight of evidence ('WOE'), \
+                            Random Forest ('RF'), Recursive Feature Elimination ('RFE'), \
+                            Extra Trees Classifier ('ETC'), Chi Square ('CS') \
+                            and L1 feature selection ('L_ONE')")
     
     #select the features provided by user and subset input data X
     def transform(self, X):
         
-        #if the function is used as part of pipeline, then try to unpack tuple values produced in the previous step. Added as a part of pipeline feature. 
+        #if the function is used as part of pipeline, then try to unpack tuple values 
+        #produced in the previous step. Added as a part of pipeline feature. 
         try:
             X, y = X
         except:
             pass
         
         #check for the map fitting
-        check_is_fitted(self, 'mapping')
+        #check_is_fitted(self, 'mapping')
+        if not self.mapping:
+            raise ValueError("Mapping variable is not present. \
+                             Estimator has to be fitted to apply transformations.")
         
-        #if the user provided number is greater than the selection techniques employed then set to the maximum votes of a variable
+        #if the user provided number is greater than the selection techniques 
+        #employed then set to the maximum votes of a variable
         if len(self.selection_techniques) < self.minimum_votes:
             self.minimum_votes = max(self.feature_votes_['Votes'])
         
@@ -376,6 +402,8 @@ class VotingSelector(BaseEstimator, TransformerMixin):
                 elif isinstance(self.mapping[k], LabelEncoder):
                     X[k] = self.mapping[k].transform(X[k].fillna("NA"))
                 else:
-                    raise ValueError(("Value provided for input variable mapping is not valid. Occurred at variable name: %s and mapping: %s. Please check the mapping value") % (str(k), str(v)))
+                    raise ValueError(("Value provided for input variable mapping is not valid. \
+                                     Occurred at variable name: %s and mapping: %s. Please check the mapping value") \
+                                     % (str(k), str(v)))
         
         return X

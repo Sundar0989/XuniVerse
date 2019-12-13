@@ -8,7 +8,7 @@ setuptools.setup(
     version="1.0.2",
     author="Sundar Krishnan",
     author_email="sundarstyles89@gmail.com",
-    description="Xverse (X-uniVerse) is collection of transformers for feature engineering and feature selection",
+    description="xverse short for X uniVerse is collection of transformers for feature engineering and feature selection",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Sundar0989/XuniVerse",

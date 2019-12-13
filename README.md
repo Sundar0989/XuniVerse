@@ -20,7 +20,10 @@ or
 ```sh
 conda install -c conda-forge xverse
 ```
-
+To install the development version. you can use
+```sh
+pip install --upgrade git+https://github.com/Sundar0989/XuniVerse
+```
 ## Usage
 
 XVerse module is fully compatible with sklearn transformers, so they can be used in pipelines or in your existing scripts. Currently, it supports only Pandas dataframes. 

@@ -21,7 +21,7 @@ conda install -c conda-forge xverse
 
 ## Usage
 
-XVerse module are fully compatible with sklearn transformers, so they can be used in pipelines or in your existing scripts. Currently, it supports only Pandas dataframes. 
+XVerse module is fully compatible with sklearn transformers, so they can be used in pipelines or in your existing scripts. Currently, it supports only Pandas dataframes. 
 
 ## Example
 

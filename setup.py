@@ -5,7 +5,7 @@ with open("README.md", "r") as f:
 
 setuptools.setup(
     name="xverse", # Replace with your own username
-    version="1.0.4",
+    version="1.0.5",
     author="Sundar Krishnan",
     author_email="sundarstyles89@gmail.com",
     description="xverse short for X uniVerse is collection of transformers for feature engineering and feature selection",

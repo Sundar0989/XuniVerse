@@ -25,6 +25,7 @@ setuptools.setup(
       'scikit-learn>=0.19.0',
       'scipy>=0.19.0',
       'statsmodels>=0.6.1',
-      'pandas>=0.21.1'
+      'pandas>=0.21.1',
+      'matplotlib>=3.0.3'
     ]
 )

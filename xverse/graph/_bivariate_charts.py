@@ -10,7 +10,8 @@ pd.options.mode.chained_assignment = None
 
 class BarCharts(BaseEstimator, TransformerMixin):
     
-    """Bar charts showing relationship between X and y (target). Input data for the BarCharts module is the output of WOE fit function (woe_df).
+    """Bar charts showing relationship between X and y (target). Input data for the BarCharts module 
+    is the output of WOE fit function (woe_df).
     
     Parameters
     ----------
@@ -31,6 +32,14 @@ class BarCharts(BaseEstimator, TransformerMixin):
         
     bar_type: 'horizontal' or 'vertical' (default='vertical')
         Type of bar chart.
+        
+    fig_size: figure size for each of the individual plots (default=(8,6))
+    
+    bar_color: CSS color style picker. Use it with the hashtag in the front. (default='#058caa')
+        Bar color
+        
+    num_color: CSS color style picker. Use it with the hashtag in the front (default='#ed8549')
+        Numbers color. It represents the numbers written on top of the bar.
         
     """
     
@@ -107,20 +116,23 @@ class BarCharts(BaseEstimator, TransformerMixin):
             percentage_label = ''
             y_label = 'Target count'
         else:
-            raise ValueError("Plot metric option is invalid. Available options - 'mean' for Event rate or 'count' for Event count.")
+            raise ValueError("Plot metric option is invalid. Available options - 'mean' for Event rate \
+                            or 'count' for Event count.")
 
         if bar_type in ['vertical', 'v']:
             bar_kind = 'bar'
         elif bar_type in ['horizontal', 'h']:
             bar_kind = 'barh'
         else:
-            raise ValueError("Bar type provided is invalid. Available options - 'vertical' or 'v'; 'horizontal' or 'h'.")
+            raise ValueError("Bar type provided is invalid. Available options - 'vertical' or 'v'; \
+                            'horizontal' or 'h'.")
             
         grouped = X.groupby(['Variable_Name'])
         
         for key, group in grouped:
-
-            ax = group.plot('Category', plot_on, kind=bar_kind, color=bar_color, linewidth=1.0, edgecolor=['black'], figsize=plot_figsize)
+        
+            ax = group.plot('Category', plot_on, kind=bar_kind, color=bar_color, linewidth=1.0, \
+                            edgecolor=['black'], figsize=plot_figsize)
             ax.set_title(str(key) + " vs " + str('target'))
             ax.set_xlabel(key)
             ax.set_ylabel(y_label)
@@ -134,6 +146,7 @@ class BarCharts(BaseEstimator, TransformerMixin):
                     text_placer = [rect.get_y(), rect.get_width(), rect.get_height()]
                     text_x_pos = 1.1*text_placer[1]
                     text_y_pos = text_placer[0]+text_placer[2]/2.
-                ax.text(text_x_pos, text_y_pos, str(round(text_placer[1],1)) + str(percentage_label), ha='center', va='bottom', color=num_color, fontweight='bold')
+                ax.text(text_x_pos, text_y_pos, str(round(text_placer[1],1)) + str(percentage_label), \
+                        ha='center', va='bottom', color=num_color, fontweight='bold')
         
         plt.show()

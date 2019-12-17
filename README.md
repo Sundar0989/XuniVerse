@@ -12,14 +12,17 @@ To install the package, download this folder and execute:
 ```sh
 python setup.py install
 ```
-or
+or from command line execute
 ```sh
 pip install xverse
 ```
-To install the development version. you can use
+To install the development version, you can use
 ```sh
 pip install --upgrade git+https://github.com/Sundar0989/XuniVerse
 ```
+
+Still have issues installing. Please refer to the 'install_help' directory to walk you through steps. 
+
 ## Usage
 
 XVerse module is fully compatible with sklearn transformers, so they can be used in pipelines or in your existing scripts. Currently, it supports only Pandas dataframes. 

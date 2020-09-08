@@ -228,7 +228,7 @@ class WOE(BaseEstimator, TransformerMixin):
         temp_woe = temp_woe[['Variable_Name', 'Category', 'Count', 'Event', 'Non_Event', \
                              'Event_Rate', 'Non_Event_Rate', 'Event_Distribution', 'Non_Event_Distribution', \
                              'WOE', 'Information_Value']]
-        temp_woe = temp_woe.replace([np.inf, -np.inf], 0)
+        temp_woe = temp_woe.replace([np.inf, -np.inf], [0, 0])
         temp_woe['Information_Value'] = temp_woe['Information_Value'].sum()
         temp_woe = temp_woe.reset_index(drop=True)
         woe_mapping[str(X.name)] = dict(zip(temp_woe['Category'], temp_woe['WOE']))

@@ -146,6 +146,7 @@ class MonotonicBinning(BaseEstimator, TransformerMixin):
             r = 0
             max_bins = self.max_bins
             force_bins = self.force_bins
+            bins_X_grouped = None
             
             """Calculate spearman correlation for the distribution identified. If the distribution is not monotonic, 
             reduce bins and reiterate. Proceed until either one of the following happens,
@@ -154,8 +155,10 @@ class MonotonicBinning(BaseEstimator, TransformerMixin):
             """
             while np.abs(r) < 1 and max_bins > 0:
                 try:
-                    ser, bins = pd.qcut(X, max_bins, retbins=True)
-                    bins_X = pd.DataFrame({"X": X, "Y": y, "Bins": ser})
+                    # Drop duplicate edges since particular value might span two or more
+                    # complete bins.
+                    ser, bins = pd.qcut(X, max_bins, retbins=True, duplicates='drop')
+                    bins_X = pd.DataFrame({"X": X, "y": y if not isinstance(y, pd.Series) else y.values, "Bins": ser})
                     bins_X_grouped = bins_X.groupby('Bins', as_index=True)
                     r, p = stats.spearmanr(bins_X_grouped.mean().X, bins_X_grouped.mean().y) #spearman operation
                     max_bins = max_bins - 1 
@@ -166,7 +169,7 @@ class MonotonicBinning(BaseEstimator, TransformerMixin):
             Execute this block when monotonic relationship is not identified by spearman technique. 
             We still want our code to produce bins.
             """
-            if len(bins_X_grouped) == 1:
+            if bins_X_grouped is None or len(bins_X_grouped) == 1:
                 bins = algos.quantile(X, np.linspace(0, 1, force_bins)) #creates a new binnning based on forced bins
                 if len(np.unique(bins)) == 2:
                     bins = np.insert(bins, 0, 1)

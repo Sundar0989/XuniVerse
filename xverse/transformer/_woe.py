@@ -110,7 +110,10 @@ class WOE(BaseEstimator, TransformerMixin):
         #if the function is used as part of pipeline, then try to unpack tuple values 
         #produced in the previous step. Added as a part of pipeline feature. 
         try:
-            X, y = X
+            # If X is a DataFrame with 2 features, the assignment would succeed
+            # but not be as intended.
+            if not isinstance(X, pd.DataFrame):
+                X, y = X
         except:
             pass
         

@@ -146,6 +146,7 @@ class MonotonicBinning(BaseEstimator, TransformerMixin):
             r = 0
             max_bins = self.max_bins
             force_bins = self.force_bins
+            bins_X_grouped = None
             
             """Calculate spearman correlation for the distribution identified. If the distribution is not monotonic, 
             reduce bins and reiterate. Proceed until either one of the following happens,
@@ -168,7 +169,7 @@ class MonotonicBinning(BaseEstimator, TransformerMixin):
             Execute this block when monotonic relationship is not identified by spearman technique. 
             We still want our code to produce bins.
             """
-            if len(bins_X_grouped) == 1:
+            if bins_X_grouped is None or len(bins_X_grouped) == 1:
                 bins = algos.quantile(X, np.linspace(0, 1, force_bins)) #creates a new binnning based on forced bins
                 if len(np.unique(bins)) == 2:
                     bins = np.insert(bins, 0, 1)

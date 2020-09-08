@@ -158,7 +158,7 @@ class MonotonicBinning(BaseEstimator, TransformerMixin):
                     # Drop duplicate edges since particular value might span two or more
                     # complete bins.
                     ser, bins = pd.qcut(X, max_bins, retbins=True, duplicates='drop')
-                    bins_X = pd.DataFrame({"X": X, "Y": y if not isinstance(y, pd.Series) else y.values, "Bins": ser})
+                    bins_X = pd.DataFrame({"X": X, "y": y if not isinstance(y, pd.Series) else y.values, "Bins": ser})
                     bins_X_grouped = bins_X.groupby('Bins', as_index=True)
                     r, p = stats.spearmanr(bins_X_grouped.mean().X, bins_X_grouped.mean().y) #spearman operation
                     max_bins = max_bins - 1 

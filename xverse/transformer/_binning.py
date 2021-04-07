@@ -157,7 +157,7 @@ class MonotonicBinning(BaseEstimator, TransformerMixin):
                     ser, bins = pd.qcut(X, max_bins, retbins=True)
                     bins_X = pd.DataFrame({"X": X, "Y": y, "Bins": ser})
                     bins_X_grouped = bins_X.groupby('Bins', as_index=True)
-                    r, p = stats.spearmanr(bins_X_grouped.mean().X, bins_X_grouped.mean().y) #spearman operation
+                    r, p = stats.spearmanr(bins_X_grouped.mean().X, bins_X_grouped.mean().Y) #spearman operation
                     max_bins = max_bins - 1 
                 except Exception as e:
                     max_bins = max_bins - 1

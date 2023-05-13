@@ -128,7 +128,7 @@ class VotingSelector(BaseEstimator, TransformerMixin):
     def recursive_feature_elimination(self, X, y, name):
         
         clf = LogisticRegression()
-        rfe = RFE(clf, self.no_of_features)
+        rfe = RFE(estimator=clf,n_features_to_select=self.no_of_features)
         rfe.fit(X, y)
 
         rfe_column_list = X.columns
